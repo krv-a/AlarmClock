@@ -132,10 +132,11 @@ namespace AlarmClock
                 if (date.Date.Date == curDate.Date 
                     && time.Hour == curDate.Hour
                     && time.Minute == curDate.Minute
-                    && time.Second == curDate.Second)
+                    && time.Second == curDate.Second
+                    && item.IsChecked)
                 {
                     MediaPlayer player = new MediaPlayer();
-                    player.Open(new Uri(@"C:\Windows\Media\Alarm01.wav", UriKind.Absolute));
+                    player.Open(new Uri(@"D:\myMusic\Desturbed\Immortalized(2015)\06. What Are You Waiting For.flac", UriKind.Absolute));
                     player.Play();
                 }
             }
@@ -172,7 +173,8 @@ namespace AlarmClock
                                ? "Будильник" + Counter.ToString()
                                : window.Name.Text,
                         Date = window?.Date?.SelectedDate ?? DateTime.Now,
-                        Time = window?.Time?.SelectedTime ?? DateTime.Now.AddMinutes(1)
+                        Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10),
+                        IsChecked = true
                     };
                     ListAlarmClocks.Add(alarmClock);
 

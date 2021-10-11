@@ -86,12 +86,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Model\AlarmModel\AlarmModelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\AddAlarmClock\AddAlarmClockViewModel.cs" />
     <Compile Include="Model\AddAlarmClock\AddAlarmClockWindow.xaml.cs">
       <DependentUpon>AddAlarmClockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\AlarmModel\AlarmModelWindow.xaml.cs">
+      <DependentUpon>AlarmModelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AlarmModel\AlarmViewModel.cs" />
     <Compile Include="Model\BaseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -48,7 +48,8 @@
                            Height="Auto"
                            Width="Auto"/>
                     <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                              ToolTip="Default ToggleButton Style" 
+                                  ToolTip="Активация"
+                                  IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                   Margin="2">
                         
                     </ToggleButton>

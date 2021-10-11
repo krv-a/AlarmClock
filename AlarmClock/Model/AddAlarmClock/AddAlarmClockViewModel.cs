@@ -65,6 +65,19 @@ namespace AlarmClock.Model.AddAlarmClock
         }
         #endregion
 
+        #region IsChecked
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Command

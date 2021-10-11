@@ -16,6 +16,7 @@ namespace AlarmClock
 
         public DateTime Time { get; set; }
 
+        public bool IsChecked { get; set; }
         public string Music { get; set; }
 
     }
