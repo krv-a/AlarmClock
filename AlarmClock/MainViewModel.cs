@@ -1,9 +1,11 @@
 ﻿using AlarmClock.Commands;
 using AlarmClock.Model;
 using AlarmClock.Model.AddAlarmClock;
+using AlarmClock.Model.AlarmModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -129,17 +131,32 @@ namespace AlarmClock
                 var date = item.Date;
                 var time = item.Time;
 
-                if (date.Date.Date == curDate.Date 
+                if (date.Date.Date == curDate.Date
                     && time.Hour == curDate.Hour
                     && time.Minute == curDate.Minute
                     && time.Second == curDate.Second
                     && item.IsChecked)
                 {
-                    MediaPlayer player = new MediaPlayer();
-                    player.Open(new Uri(@"D:\myMusic\Desturbed\Immortalized(2015)\06. What Are You Waiting For.flac", UriKind.Absolute));
-                    player.Play();
+                     OpenAlarmForm(item);
+
                 }
             }
+        }
+
+        private static void   OpenAlarmForm(AlarmClockModel item)
+        {
+
+            App.Current.Dispatcher.Invoke( () =>
+            {
+                var window = new AlarmModelWindow
+                {
+                    DataContext = new AlarmViewModel(item.Music),
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                };
+
+                window.Show();
+            });
+
         }
         #endregion
 
@@ -150,7 +167,7 @@ namespace AlarmClock
         {
             try
             {
-           
+
                 // запуск окна 
                 var win = App.Current.Windows.Cast<Window>()
                       .FirstOrDefault(w => w is AddAlarmClockWindow);
@@ -174,7 +191,8 @@ namespace AlarmClock
                                : window.Name.Text,
                         Date = window?.Date?.SelectedDate ?? DateTime.Now,
                         Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10),
-                        IsChecked = true
+                        IsChecked = true,
+                        Music = Counter == 1 ? @"C:\Windows\Media\Alarm01.wav" : @"C:\Windows\Media\Alarm05.wav"
                     };
                     ListAlarmClocks.Add(alarmClock);
 
