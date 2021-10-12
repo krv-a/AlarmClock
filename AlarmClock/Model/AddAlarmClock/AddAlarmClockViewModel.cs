@@ -1,4 +1,5 @@
 ﻿using AlarmClock.Commands;
+using AlarmClock.Model.AlarmModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace AlarmClock.Model.AddAlarmClock
     class AddAlarmClockViewModel : BaseViewModel
     {
         #region Properties
-       
+
         #region Id
         private int id;
         public int Id
@@ -117,11 +118,47 @@ namespace AlarmClock.Model.AddAlarmClock
         }
         #endregion
 
+        #region ListSounds 
+        private List<SoundModel> listSounds = new List<SoundModel>();
+        public List<SoundModel> ListSounds
+        {
+            get => listSounds;
+            set
+            {
+                listSounds = value;
+                OnPropertyChanged(nameof(ListSounds));
+            }
+        }
+        #endregion
+
+        #region SelectedSound
+        private SoundModel selectedSound = new SoundModel();
+        public SoundModel SelectedSound
+        {
+            get => selectedSound;
+            set
+            {
+                selectedSound = value;
+                OnPropertyChanged(nameof(SelectedSound));
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Constructors
         public AddAlarmClockViewModel(AlarmClockModel alarmClock = null)
         {
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm01", RuName = "Звонок1" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm02", RuName = "Звонок2" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm03", RuName = "Звонок3" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm04", RuName = "Звонок4" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm05", RuName = "Звонок5" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm06", RuName = "Звонок6" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm07", RuName = "Звонок7" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm08", RuName = "Звонок8" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm09", RuName = "Звонок9" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm10", RuName = "Звонок10" });
 
             if (alarmClock != null)
             {
@@ -132,10 +169,17 @@ namespace AlarmClock.Model.AddAlarmClock
                 Time = alarmClock.Time;
                 IsChecked = alarmClock.IsChecked;
                 IsDeleted = alarmClock.IsDeleted;
-                Music = alarmClock.Music; 
+                Music = alarmClock.Music;
+                SelectedSound = GetSound(alarmClock.Music);
             }
 
-        }  
+        }
+
+        private SoundModel GetSound(string music)
+        {
+            var sound = ListSounds.Where(w => w.RuName == music).FirstOrDefault();
+            return sound;
+        }
         #endregion
 
         #region Command
@@ -167,6 +211,47 @@ namespace AlarmClock.Model.AddAlarmClock
             {
                 return selectCell ??
                      (selectCell = new RelayCommand(AddAlarmClockExecute));
+            }
+        }
+
+        #endregion
+
+        #region DelCommand
+        private void DelAlarmClockExecute(object obj)
+        {
+            try
+            {
+
+                try
+                {
+                    IsDeleted = true;
+                    var window = App.Current.Windows.Cast<Window>()
+                               .FirstOrDefault(w => w is AddAlarmClockWindow);
+
+
+                    window.DialogResult = true;
+                    window.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, nameof(Exception));
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, nameof(Exception));
+            }
+
+        }
+
+        private RelayCommand delAlarmClock;
+        public ICommand DelAlarmClockCommand
+        {
+            get
+            {
+                return delAlarmClock ??
+                     (delAlarmClock = new RelayCommand(DelAlarmClockExecute));
             }
         }
 

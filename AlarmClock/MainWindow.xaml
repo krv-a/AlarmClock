@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlarmClock"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -191,6 +192,14 @@
                  SelectedItem="{Binding SelectedAlarmClock, UpdateSourceTrigger=PropertyChanged}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction 
+                        Command="{Binding SelectedAlarmClockCommand}"
+                    />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -202,6 +211,7 @@
 
 
         </ListBox>
+        
         <StackPanel Grid.Row="3"
                     Grid.Column="0"
                     Orientation="Horizontal"
@@ -219,5 +229,7 @@
                 </materialDesign:PackIcon>
             </Button>
         </StackPanel>
+    
     </Grid>
+    
 </Window>

@@ -15,8 +15,8 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="Добавление/редактирование"
-        Height="330" 
-        Width="250"
+        Height="355" 
+        Width="260"
         Name="AddAlarmDialog"
         ResizeMode="NoResize">
     <Grid >
@@ -27,7 +27,24 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0"
-                    Orientation="Vertical">
+                    Orientation="Vertical"
+                    Margin="2">
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        Margin="2"
+                        Height="20"
+                        Width="20"
+                        VerticalAlignment="Top"
+                        Command="{Binding DelAlarmClockCommand}"
+                        x:Name="IsDeleted"
+                       >
+                    <materialDesign:PackIcon Kind="DeleteForeverOutline" 
+                                             Height="15"
+                                             Width="15" />
+                </Button>
+            </StackPanel>
 
             <!--Имя-->
             <StackPanel Orientation="Horizontal"
@@ -97,16 +114,16 @@
 
 
                 <ComboBox FontSize="20" 
+                          Name="Sound"
                           materialDesign:HintAssist.Hint="Мелодия" 
                           Style="{StaticResource MaterialDesignFilledComboBox}"
                           FontWeight="Bold"
                           Width="170"
                           Height="Auto"
+                          ItemsSource="{Binding ListSounds, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedSound, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="RuName"
                           >
-                    <ComboBoxItem Content="1"/>
-                    <ComboBoxItem Content="2"/>
-                    <ComboBoxItem Content="3"/>
-                    <ComboBoxItem Content="4"/>
                 </ComboBox>
             </StackPanel>
             <!--Кнопки-->

@@ -14,8 +14,9 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Звонок" Height="300" Width="300"
-        ResizeMode="NoResize">
+        Title="Звонок" Height="150" Width="300"
+        ResizeMode="NoResize"
+        WindowStyle="ToolWindow">
     <Grid >
         <Grid.ColumnDefinitions>
            
@@ -24,15 +25,65 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
-                    Grid.Row="0">
+                    Grid.Row="0"
+                    Margin="5">
             <Label>Отключить</Label>
             <ToggleButton
                Style="{StaticResource MaterialDesignSwitchToggleButton}"
                ToolTip="Выключить" 
                IsChecked="{Binding IsCheckedStop, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1"
+                    Margin="5">
+            <Label>Продлить на</Label>
+            <TextBox Width="25"
+                     Margin="2"
+                     Text="5"
+                     HorizontalAlignment="Right"
+                >
+                
+            </TextBox>
+            <Label> мин </Label>
+            <ToggleButton
+               Style="{StaticResource MaterialDesignSwitchToggleButton}"
+               ToolTip="Выключить" 
+               IsChecked="{Binding IsCheckedStop, UpdateSourceTrigger=PropertyChanged}"/>
+
+        </StackPanel>
+        <!--Кнопки-->
+        <StackPanel Orientation="Horizontal"
+                        Margin="5"
+                        HorizontalAlignment="Right"
+                    Grid.Row="2">
+
+            <Button
+                        Style="{StaticResource MaterialDesignFlatLightBgButton}"
+                        ToolTip="Добавить"
+                        Margin="5" 
+                        Command="{Binding OkAlarmClockCommand}"
+                        
+                        >
+                Ок
+            </Button>
+            <!--<Button
+                        Style="{StaticResource MaterialDesignFlatLightBgButton}"
+                        ToolTip="Отмена"
+                        Margin="5"
+                        IsCancel="True">
+
+                <materialDesign:PackIcon
+                       Kind="BellCancelOutline"
+                       Height="24"
+                       Width="24"
+                       >
+                </materialDesign:PackIcon>
+            </Button>-->
         </StackPanel>
     </Grid>
 </Window>

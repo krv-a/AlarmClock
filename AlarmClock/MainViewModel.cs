@@ -218,6 +218,42 @@ namespace AlarmClock
            });
 
         }
+
+        private void OpenAlarmClock(AlarmClockModel value)
+        {
+            // запуск окна 
+            var win = App.Current.Windows.Cast<Window>()
+                  .FirstOrDefault(w => w is AddAlarmClockWindow);
+            if (win != null)
+                win.Close();
+
+            var window = new AddAlarmClockWindow
+            {
+                DataContext = new AddAlarmClockViewModel(SelectedAlarmClock),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                if (!((AddAlarmClockViewModel)(window.DataContext)).IsDeleted)
+                {
+                    SelectedAlarmClock.Name = window.Name.Text;
+                    SelectedAlarmClock.Date = window?.Date?.SelectedDate ?? DateTime.Now;
+                    SelectedAlarmClock.Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10);
+                    SelectedAlarmClock.Music = window?.Sound?.Text;
+
+                    XMLService ser = new XMLService(ListAlarmClocks);
+                    ser.SaveFile();
+                    ListAlarmClocks = ser.OpenFile();
+                }
+                else
+                {
+                    ListAlarmClocks.Remove(SelectedAlarmClock);
+                }
+
+
+            }
+        }
         #endregion
 
         #region Commands
@@ -254,7 +290,7 @@ namespace AlarmClock
                         Date = window?.Date?.SelectedDate ?? DateTime.Now,
                         Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10),
                         IsChecked = true,
-                        Music = Counter == 1 ? @"C:\Windows\Media\Alarm01.wav" : @"C:\Windows\Media\Alarm05.wav"
+                        Music = window.Sound.Text
                     };
                     ListAlarmClocks.Add(alarmClock);
                     OnPropertyChanged(nameof(ListAlarmClocks));
@@ -281,46 +317,13 @@ namespace AlarmClock
 
         #endregion
 
-        private void OpenAlarmClock(AlarmClockModel value)
-        {
-            // запуск окна 
-            var win = App.Current.Windows.Cast<Window>()
-                  .FirstOrDefault(w => w is AddAlarmClockWindow);
-            if (win != null)
-                win.Close();
+        #region SelectedAlarmClockCommand
 
-            var window = new AddAlarmClockWindow
-            {
-                DataContext = new AddAlarmClockViewModel(SelectedAlarmClock),
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            };
-
-            if (window.ShowDialog() == true)
-            {
-
-                SelectedAlarmClock.Name = window.Name.Text;
-                SelectedAlarmClock.Date = window?.Date?.SelectedDate ?? DateTime.Now;
-                SelectedAlarmClock.Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10);
-                SelectedAlarmClock.Music = Counter == 1 ? @"C:\Windows\Media\Alarm01.wav" : @"C:\Windows\Media\Alarm05.wav";
-
-                XMLService ser = new XMLService(ListAlarmClocks);
-                ser.SaveFile();
-                ListAlarmClocks = ser.OpenFile();
-
-            }
-        }
-
-        #region DelCommand
-        private void DelAlarmClockExecute(object obj)
+        private void SelectedAlarmClockExecute(object obj)
         {
             try
             {
-
-
-                //ListAlarmClocks.Add(alarmClock);
-                OnPropertyChanged(nameof(ListAlarmClocks));
-
-
+                OpenAlarmClock(SelectedAlarmClock);
             }
             catch (Exception e)
             {
@@ -329,17 +332,17 @@ namespace AlarmClock
 
         }
 
-        private RelayCommand delAlarmClock;
-        public ICommand DelAlarmClockCommand
+        private RelayCommand selectedAlarmClockCommand;
+        public ICommand SelectedAlarmClockCommand
         {
             get
             {
-                return delAlarmClock ??
-                     (delAlarmClock = new RelayCommand(DelAlarmClockExecute));
+                return selectedAlarmClockCommand ??
+                     (selectedAlarmClockCommand = new RelayCommand(SelectedAlarmClockExecute));
             }
         }
-
         #endregion
+       
 
         #endregion
     }
