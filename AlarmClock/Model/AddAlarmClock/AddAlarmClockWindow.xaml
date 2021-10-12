@@ -39,6 +39,7 @@
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                          VerticalAlignment="Center" FontWeight="Bold" FontSize="20" 
                          Width="170"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                          />
             </StackPanel>
             <!--Дата-->
@@ -53,6 +54,7 @@
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
                             FontWeight="Bold"
                             FontSize="20"
+                            SelectedDate="{Binding Date, StringFormat={}{0:dd.MM.yyyy}, UpdateSourceTrigger=PropertyChanged}"
                             >
                     <!--<DatePicker.SelectedDate>
                         <Binding Path="FutureValidatingDate"
@@ -83,6 +85,7 @@
                     Height="Auto"
                     FontWeight="Bold"
                     Width="170"
+                    SelectedTime="{Binding Time, StringFormat='{}{0:HH:mm:ss}', UpdateSourceTrigger=PropertyChanged}"
                     HorizontalAlignment="Center"/>
 
 

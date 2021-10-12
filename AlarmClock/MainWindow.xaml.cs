@@ -18,8 +18,7 @@ namespace AlarmClock
         public MainWindow()
         {
             InitializeComponent();
-            XMLService ser = new XMLService();
-            this.ListAlarmClock.ItemsSource = ser.OpenFile();
+            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

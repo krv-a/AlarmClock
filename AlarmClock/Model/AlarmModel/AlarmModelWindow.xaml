@@ -18,14 +18,21 @@
         ResizeMode="NoResize">
     <Grid >
         <Grid.ColumnDefinitions>
+           
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical">
-            <Button></Button>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Label>Отключить</Label>
+            <ToggleButton
+               Style="{StaticResource MaterialDesignSwitchToggleButton}"
+               ToolTip="Выключить" 
+               IsChecked="{Binding IsCheckedStop, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
     </Grid>
 </Window>

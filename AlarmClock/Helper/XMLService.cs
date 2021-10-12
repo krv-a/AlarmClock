@@ -30,6 +30,8 @@ namespace AlarmClock.Helper
                 XElement alarmClock = new XElement("alarmClock");
 
                 // создаем атрибуты
+                XAttribute isDeleted = new XAttribute("IsDeleted", item.IsDeleted);
+                XAttribute guid = new XAttribute("Guid", item.Guid);
                 XAttribute name = new XAttribute("Name", item.Name);
                 XAttribute date = new XAttribute("Date", item.Date);
                 XAttribute time = new XAttribute("Time", item.Time);
@@ -37,6 +39,8 @@ namespace AlarmClock.Helper
                 XAttribute isChecked = new XAttribute("IsChecked", item.IsChecked);
                 XAttribute music = new XAttribute("Music", item.Music);
                 // добавляем атрибут и элементы в первый элемент
+                alarmClock.Add(isDeleted);
+                alarmClock.Add(guid);
                 alarmClock.Add(name);
                 alarmClock.Add(date);
                 alarmClock.Add(time);
@@ -56,37 +60,48 @@ namespace AlarmClock.Helper
 
         public ObservableCollection<AlarmClockModel> OpenFile()
         {
-            ObservableCollection<AlarmClockModel> listAlarmClock = new ObservableCollection<AlarmClockModel>();
-
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load("db.xml");
-
-            // получим корневой элемент
-            XmlElement xRoot = xDoc.DocumentElement;
-            // обход всех узлов в корневом элементе
-            foreach (XmlNode xnode in xRoot)
+            try
             {
-                var date = xnode.Attributes.GetNamedItem("Date");
-                var time = xnode.Attributes.GetNamedItem("Time");
-                var name = xnode.Attributes.GetNamedItem("Name");
-                var id = xnode.Attributes.GetNamedItem("Id");
-                var isChecked = xnode.Attributes.GetNamedItem("IsChecked");
-                var music = xnode.Attributes.GetNamedItem("Music");
-                AlarmClockModel ac = new AlarmClockModel()
+                ObservableCollection<AlarmClockModel> listAlarmClock = new ObservableCollection<AlarmClockModel>();
+
+                XmlDocument xDoc = new XmlDocument();
+                xDoc.Load("db.xml");
+
+                // получим корневой элемент
+                XmlElement xRoot = xDoc.DocumentElement;
+                // обход всех узлов в корневом элементе
+                foreach (XmlNode xnode in xRoot)
                 {
-                    Date = Convert.ToDateTime(date.Value),
-                    Time = Convert.ToDateTime(time.Value),
-                    Name = name.Value,
-                    Id = Convert.ToInt32(id.Value),
-                    Music = music.Value,
-                    IsChecked = Convert.ToBoolean(isChecked.Value),
+                    var isDeleted = xnode.Attributes.GetNamedItem("IsDeleted");
+                    var guid = xnode.Attributes.GetNamedItem("Guid");
+                    var date = xnode.Attributes.GetNamedItem("Date");
+                    var time = xnode.Attributes.GetNamedItem("Time");
+                    var name = xnode.Attributes.GetNamedItem("Name");
+                    var id = xnode.Attributes.GetNamedItem("Id");
+                    var isChecked = xnode.Attributes.GetNamedItem("IsChecked");
+                    var music = xnode.Attributes.GetNamedItem("Music");
+                    AlarmClockModel ac = new AlarmClockModel()
+                    {
+                        IsDeleted = Convert.ToBoolean(isDeleted.Value),
+                        Guid = Guid.Parse(guid.Value),
+                        Date = Convert.ToDateTime(date.Value),
+                        Time = Convert.ToDateTime(time.Value),
+                        Name = name.Value,
+                        Id = Convert.ToInt32(id.Value),
+                        Music = music.Value,
+                        IsChecked = Convert.ToBoolean(isChecked.Value),
 
 
-                };
-                listAlarmClock.Add(ac);
+                    };
+                    listAlarmClock.Add(ac);
+                }
+
+                return listAlarmClock;
             }
-
-            return listAlarmClock;
+            catch (Exception e)
+            {
+                return new ObservableCollection<AlarmClockModel>();
+            }
         }
     }
 }

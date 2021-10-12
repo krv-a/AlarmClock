@@ -19,7 +19,7 @@
     <Window.Resources>
         <DataTemplate x:Key="Alarm"
                       >
-            <StackPanel Orientation="Vertical"
+            <StackPanel Orientation="Horizontal"
                         Background="LightGray"
                         >
                 <StackPanel Orientation="Horizontal"
@@ -30,14 +30,14 @@
                         Height="Auto"
                         Margin="2"
                         >
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                    <!--<Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         Margin="2"
                        >
                         <materialDesign:PackIcon
                          Kind="Alarm"
                          Height="20"
                          Width="20" />
-                    </Button>
+                    </Button>-->
                     <TextBlock Text="{Binding Name}"
                            Margin="2"
                            FontWeight="Bold"
@@ -54,13 +54,13 @@
                         
                     </ToggleButton>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Vertical"
                             HorizontalAlignment="Center">
                     <TextBlock Text="Дата"
                            Margin="2"
                            FontWeight="Bold"
                            FontSize="16"
-                           HorizontalAlignment="Left"
+                           HorizontalAlignment="Center"
                            Height="Auto"
                            Width="Auto"
                         >
@@ -77,13 +77,13 @@
 
                     </TextBlock>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Vertical"
                             HorizontalAlignment="Center">
                     <TextBlock Text="Время"
                            Margin="2"
                            FontWeight="Bold"
                            FontSize="16"
-                           HorizontalAlignment="Left"
+                           HorizontalAlignment="Center"
                            Height="Auto"
                            Width="Auto"
                         >
@@ -100,6 +100,19 @@
 
                     </TextBlock>
                 </StackPanel>
+
+                <!--<Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        Margin="2"
+                        Height="20"
+                        Width="20"
+                        VerticalAlignment="Top"
+                        Command="{Binding DelAlarmClockCommand}"
+                       >
+                    <materialDesign:PackIcon Kind="DeleteForeverOutline" 
+                                             Height="15"
+                                             Width="15" />
+                </Button>-->
+                
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -171,11 +184,14 @@
         </StackPanel>
 
         <ListBox Name="ListAlarmClock" 
-                     Grid.Row="2"
-                     Grid.Column="0"
-                     ItemsSource="{Binding ListAlarmClocks, UpdateSourceTrigger=PropertyChanged}"
-                     ItemTemplate="{StaticResource ResourceKey=Alarm}"
-                     >
+                 Grid.Row="2"
+                 Grid.Column="0"
+                 ItemsSource="{Binding ListAlarmClocks, UpdateSourceTrigger=PropertyChanged}"
+                 ItemTemplate="{StaticResource ResourceKey=Alarm}"
+                 SelectedItem="{Binding SelectedAlarmClock, UpdateSourceTrigger=PropertyChanged}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 >
+            
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal">

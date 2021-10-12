@@ -12,8 +12,24 @@ namespace AlarmClock.Model.AlarmModel
 {
     class AlarmViewModel : BaseViewModel
     {
+        #region Members
+        SoundPlayer sp = new SoundPlayer();
+        #endregion
         #region Properties
-
+        #region IsCheckedStop
+        private bool isCheckedStop = true;
+        public bool IsCheckedStop
+        {
+            get => isCheckedStop;
+            set
+            {
+                isCheckedStop = value;
+                if (!value)
+                    sp.Stop();
+                OnPropertyChanged(nameof(IsCheckedStop));
+            }
+        }
+        #endregion
         #endregion
 
         #region Constructors
@@ -34,12 +50,10 @@ namespace AlarmClock.Model.AlarmModel
 
             Task.Run(() =>
             {
-                SoundPlayer sp = new SoundPlayer();
-                sp.Stream = Properties.Resources.Alarm01;// pathMelody;
+                sp.Stream = Properties.Resources.Alarm01;
                 //sp.Load();
                 sp.PlayLooping();
-            }
-            );
+            });
 
         }
 

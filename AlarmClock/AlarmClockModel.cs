@@ -9,15 +9,13 @@ namespace AlarmClock
     public class AlarmClockModel
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
-
         public DateTime Date { get; set; }
-
         public DateTime Time { get; set; }
-
         public bool IsChecked { get; set; }
         public string Music { get; set; }
+        public bool IsDeleted { get; set; }
+        public Guid Guid { get; set; }
 
     }
 }

@@ -39,21 +39,21 @@ namespace AlarmClock.Model.AddAlarmClock
         }
         #endregion
 
-        #region Data
-        private DateTime data;
-        public DateTime Data
+        #region Date
+        private DateTime date = DateTime.Now;
+        public DateTime Date
         {
-            get => data;
+            get => date;
             set
             {
-                data = value;
-                OnPropertyChanged(nameof(Data));
+                date = value;
+                OnPropertyChanged(nameof(Date));
             }
         }
         #endregion
 
         #region Time
-        private DateTime time;
+        private DateTime time = DateTime.Now;
         public DateTime Time
         {
             get => time;
@@ -78,6 +78,64 @@ namespace AlarmClock.Model.AddAlarmClock
         }
         #endregion
 
+        #region IsDeleted
+        private bool isDeleted;
+        public bool IsDeleted
+        {
+            get => isDeleted;
+            set
+            {
+                isDeleted = value;
+                OnPropertyChanged(nameof(IsDeleted));
+            }
+        }
+        #endregion
+
+        #region Guid
+        private Guid guid;
+        public Guid Guid
+        {
+            get => guid;
+            set
+            {
+                guid = value;
+                OnPropertyChanged(nameof(Guid));
+            }
+        }
+        #endregion
+
+        #region Music
+        private string music;
+        public string Music
+        {
+            get => music;
+            set
+            {
+                music = value;
+                OnPropertyChanged(nameof(Music));
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Constructors
+        public AddAlarmClockViewModel(AlarmClockModel alarmClock = null)
+        {
+
+            if (alarmClock != null)
+            {
+                Id = alarmClock.Id;
+                Guid = alarmClock.Guid;
+                Name = alarmClock.Name;
+                Date = alarmClock.Date;
+                Time = alarmClock.Time;
+                IsChecked = alarmClock.IsChecked;
+                IsDeleted = alarmClock.IsDeleted;
+                Music = alarmClock.Music; 
+            }
+
+        }  
         #endregion
 
         #region Command

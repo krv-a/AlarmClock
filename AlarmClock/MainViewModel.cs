@@ -1,4 +1,5 @@
 ﻿using AlarmClock.Commands;
+using AlarmClock.Helper;
 using AlarmClock.Model;
 using AlarmClock.Model.AddAlarmClock;
 using AlarmClock.Model.AlarmModel;
@@ -85,6 +86,32 @@ namespace AlarmClock
         }
         #endregion
 
+        #region IsDeleted
+        private bool isDeleted;
+        public bool IsDeleted
+        {
+            get => isDeleted;
+            set
+            {
+                isDeleted = value;
+                OnPropertyChanged(nameof(IsDeleted));
+            }
+        }
+        #endregion
+
+        #region Guid
+        private Guid guid;
+        public Guid Guid
+        {
+            get => guid;
+            set
+            {
+                guid = value;
+                OnPropertyChanged(nameof(Guid));
+            }
+        }
+        #endregion
+
         #region  ListAlarmClocks
         private ObservableCollection<AlarmClockModel> listAlarmClocks = new ObservableCollection<AlarmClockModel>();
 
@@ -93,15 +120,42 @@ namespace AlarmClock
             get => listAlarmClocks;
             set
             {
-                if (listAlarmClocks != value)
-                {
+                
                     listAlarmClocks = value;
                     OnPropertyChanged(nameof(ListAlarmClocks));
-                }
             }
         }
 
 
+        #endregion
+
+        #region SelectedAlarmClock
+
+        private AlarmClockModel selectedAlarmClock = new AlarmClockModel();
+
+        public AlarmClockModel SelectedAlarmClock
+        {
+            get => selectedAlarmClock;
+            set
+            {
+                if (selectedAlarmClock != value)
+                {
+                    selectedAlarmClock = value;
+                    if(value != null)
+                        OpenAlarmClock(value);
+                    OnPropertyChanged(nameof(SelectedAlarmClock));
+                }
+            }
+        }
+
+       
+
+        private void DeleteAlarmClock(AlarmClockModel value)
+        {
+            var alarmClock = ListAlarmClocks.Where(w => w.Guid == value.Guid && w.IsDeleted == true).FirstOrDefault();
+            if (alarmClock != null)
+                ListAlarmClocks.Remove(alarmClock);
+        }
         #endregion
 
         #endregion
@@ -113,6 +167,9 @@ namespace AlarmClock
             myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
             myDispatcherTimer.Tick += new EventHandler(Each_Tick);
             myDispatcherTimer.Start();
+
+            XMLService ser = new XMLService();
+            ListAlarmClocks = ser.OpenFile();
         }
         #endregion
 
@@ -126,36 +183,39 @@ namespace AlarmClock
             Secunda = curDate.Second.ToString("00");
             Date = curDate.Date.ToString("d");
 
-            foreach (var item in ListAlarmClocks)
+            if (ListAlarmClocks != null)
             {
-                var date = item.Date;
-                var time = item.Time;
-
-                if (date.Date.Date == curDate.Date
-                    && time.Hour == curDate.Hour
-                    && time.Minute == curDate.Minute
-                    && time.Second == curDate.Second
-                    && item.IsChecked)
+                foreach (var item in ListAlarmClocks)
                 {
-                     OpenAlarmForm(item);
+                    var date = item.Date;
+                    var time = item.Time;
 
-                }
+                    if (date.Date.Date == curDate.Date
+                        && time.Hour == curDate.Hour
+                        && time.Minute == curDate.Minute
+                        && time.Second == curDate.Second
+                        && item.IsChecked)
+                    {
+                        OpenAlarmForm(item);
+
+                    }
+                } 
             }
         }
 
-        private static void   OpenAlarmForm(AlarmClockModel item)
+        private static void OpenAlarmForm(AlarmClockModel item)
         {
 
-            App.Current.Dispatcher.Invoke( () =>
-            {
-                var window = new AlarmModelWindow
-                {
-                    DataContext = new AlarmViewModel(item.Music),
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                };
+            App.Current.Dispatcher.Invoke(() =>
+           {
+               var window = new AlarmModelWindow
+               {
+                   DataContext = new AlarmViewModel(item.Music),
+                   WindowStartupLocation = WindowStartupLocation.CenterScreen,
+               };
 
-                window.Show();
-            });
+               window.Show();
+           });
 
         }
         #endregion
@@ -185,6 +245,8 @@ namespace AlarmClock
                     Counter++;
                     AlarmClockModel alarmClock = new AlarmClockModel
                     {
+                        Guid = Guid.NewGuid(),
+                        IsDeleted = false,
                         Id = Counter,
                         Name = string.IsNullOrEmpty(window.Name.Text) == true
                                ? "Будильник" + Counter.ToString()
@@ -195,6 +257,7 @@ namespace AlarmClock
                         Music = Counter == 1 ? @"C:\Windows\Media\Alarm01.wav" : @"C:\Windows\Media\Alarm05.wav"
                     };
                     ListAlarmClocks.Add(alarmClock);
+                    OnPropertyChanged(nameof(ListAlarmClocks));
 
                 }
 
@@ -206,7 +269,6 @@ namespace AlarmClock
 
         }
 
-
         private RelayCommand addAlarmClock;
         public ICommand AddAlarmClockCommand
         {
@@ -214,6 +276,66 @@ namespace AlarmClock
             {
                 return addAlarmClock ??
                      (addAlarmClock = new RelayCommand(AddAlarmClockExecute));
+            }
+        }
+
+        #endregion
+
+        private void OpenAlarmClock(AlarmClockModel value)
+        {
+            // запуск окна 
+            var win = App.Current.Windows.Cast<Window>()
+                  .FirstOrDefault(w => w is AddAlarmClockWindow);
+            if (win != null)
+                win.Close();
+
+            var window = new AddAlarmClockWindow
+            {
+                DataContext = new AddAlarmClockViewModel(SelectedAlarmClock),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            };
+
+            if (window.ShowDialog() == true)
+            {
+
+                SelectedAlarmClock.Name = window.Name.Text;
+                SelectedAlarmClock.Date = window?.Date?.SelectedDate ?? DateTime.Now;
+                SelectedAlarmClock.Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10);
+                SelectedAlarmClock.Music = Counter == 1 ? @"C:\Windows\Media\Alarm01.wav" : @"C:\Windows\Media\Alarm05.wav";
+
+                XMLService ser = new XMLService(ListAlarmClocks);
+                ser.SaveFile();
+                ListAlarmClocks = ser.OpenFile();
+
+            }
+        }
+
+        #region DelCommand
+        private void DelAlarmClockExecute(object obj)
+        {
+            try
+            {
+
+
+                //ListAlarmClocks.Add(alarmClock);
+                OnPropertyChanged(nameof(ListAlarmClocks));
+
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, nameof(Exception));
+            }
+
+        }
+
+        private RelayCommand delAlarmClock;
+        public ICommand DelAlarmClockCommand
+        {
+            get
+            {
+                return delAlarmClock ??
+                     (delAlarmClock = new RelayCommand(DelAlarmClockExecute));
             }
         }
 
