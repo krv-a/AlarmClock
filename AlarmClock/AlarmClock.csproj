@@ -82,7 +82,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Helper\FutureDateValidationRule.cs" />
     <Compile Include="Helper\XMLService.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">

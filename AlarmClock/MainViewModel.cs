@@ -174,6 +174,11 @@ namespace AlarmClock
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Отслеживает изменение времени
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="sender"></param>
         public void Each_Tick(object o, EventArgs sender)
         {
             DateTime curDate = DateTime.Now;
@@ -203,22 +208,32 @@ namespace AlarmClock
             }
         }
 
-        private static void OpenAlarmForm(AlarmClockModel item)
+        /// <summary>
+        /// Форма открывается при срабатывании будильника
+        /// </summary>
+        /// <param name="item"></param>
+        private  void OpenAlarmForm(AlarmClockModel item)
         {
 
             App.Current.Dispatcher.Invoke(() =>
            {
                var window = new AlarmModelWindow
                {
-                   DataContext = new AlarmViewModel(item.Music),
+                   Title = item.Name,
+                   DataContext = new AlarmViewModel(item.Music, item.Guid),
                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
                };
 
                window.Show();
+
            });
 
         }
-
+        
+        /// <summary>
+        /// Открывает форму для добавления/редактирования будильника
+        /// </summary>
+        /// <param name="value"></param>
         private void OpenAlarmClock(AlarmClockModel value)
         {
             // запуск окна 
@@ -342,7 +357,6 @@ namespace AlarmClock
             }
         }
         #endregion
-       
 
         #endregion
     }

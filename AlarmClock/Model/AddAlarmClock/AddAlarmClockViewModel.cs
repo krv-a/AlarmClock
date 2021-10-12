@@ -149,16 +149,9 @@ namespace AlarmClock.Model.AddAlarmClock
         #region Constructors
         public AddAlarmClockViewModel(AlarmClockModel alarmClock = null)
         {
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm01", RuName = "Звонок1" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm02", RuName = "Звонок2" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm03", RuName = "Звонок3" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm04", RuName = "Звонок4" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm05", RuName = "Звонок5" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm06", RuName = "Звонок6" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm07", RuName = "Звонок7" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm08", RuName = "Звонок8" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm09", RuName = "Звонок9" });
-            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm10", RuName = "Звонок10" });
+            CreateListSounds();
+
+            SelectedSound = ListSounds[0];
 
             if (alarmClock != null)
             {
@@ -175,10 +168,31 @@ namespace AlarmClock.Model.AddAlarmClock
 
         }
 
+        
+
         private SoundModel GetSound(string music)
         {
             var sound = ListSounds.Where(w => w.RuName == music).FirstOrDefault();
             return sound;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Создает список с мелодиями
+        /// </summary>
+        private void CreateListSounds()
+        {
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm01", RuName = "Звонок1" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm02", RuName = "Звонок2" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm03", RuName = "Звонок3" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm04", RuName = "Звонок4" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm05", RuName = "Звонок5" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm06", RuName = "Звонок6" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm07", RuName = "Звонок7" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm08", RuName = "Звонок8" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm09", RuName = "Звонок9" });
+            ListSounds.Add(new SoundModel() { id = 1, Name = "Alarm10", RuName = "Звонок10" });
         }
         #endregion
 

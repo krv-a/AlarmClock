@@ -72,7 +72,7 @@
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
                             FontWeight="Bold"
                             FontSize="20"
-                            SelectedDate="{Binding Date, StringFormat={}{0:dd.MM.yyyy}, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedDate="{Binding Date, StringFormat={}{0:dd.MM.yyyy}, ConverterCulture=ru-Ru, UpdateSourceTrigger=PropertyChanged}"
                             >
                     <!--<DatePicker.SelectedDate>
                         <Binding Path="FutureValidatingDate"

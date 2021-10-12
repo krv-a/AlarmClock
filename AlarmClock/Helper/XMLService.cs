@@ -5,18 +5,32 @@ using System.Xml.Linq;
 
 namespace AlarmClock.Helper
 {
+    /// <summary>
+    /// Сервис для сохранения и восстановления будильников в xml файле
+    /// </summary>
     public  class XMLService
     {
-        private ObservableCollection<AlarmClockModel> _list;
-        public  XMLService(ObservableCollection<AlarmClockModel> list)
+        #region Members
+        private ObservableCollection<AlarmClockModel> _list; 
+        #endregion
+
+        #region Constructors
+        public XMLService(ObservableCollection<AlarmClockModel> list)
         {
             _list = list;
-        }
+        } 
+       
 
         public XMLService()
         {
 
         }
+        #endregion
+
+        #region Methds
+        /// <summary>
+        /// Сохраняет список будильников в файл
+        /// </summary>
         public void SaveFile()
         {
             XDocument xdoc = new XDocument();
@@ -58,6 +72,10 @@ namespace AlarmClock.Helper
             xdoc.Save("db.xml");
         }
 
+        /// <summary>
+        /// Получает список юудильков из файла
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<AlarmClockModel> OpenFile()
         {
             try
@@ -102,6 +120,7 @@ namespace AlarmClock.Helper
             {
                 return new ObservableCollection<AlarmClockModel>();
             }
-        }
+        } 
+        #endregion
     }
 }

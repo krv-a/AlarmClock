@@ -1,4 +1,5 @@
 ﻿using AlarmClock.Commands;
+using AlarmClock.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace AlarmClock.Model.AlarmModel
     {
         #region Members
         SoundPlayer sp = new SoundPlayer();
+        Guid guid;
         #endregion
 
         #region Properties
@@ -35,8 +37,21 @@ namespace AlarmClock.Model.AlarmModel
         }
         #endregion
 
+        #region IsProlong
+        private bool isProlong = false;
+        public bool IsProlong
+        {
+            get => isProlong;
+            set
+            {
+                isProlong = value;
+                OnPropertyChanged(nameof(IsProlong));
+            }
+        }
+        #endregion
+
         #region ProlongInt
-        private int prolongInt = 0;
+        private int prolongInt = 5;
         public int ProlongInt
         {
             get => prolongInt;
@@ -68,9 +83,9 @@ namespace AlarmClock.Model.AlarmModel
 
         #region Constructors
 
-        public AlarmViewModel(string pathMelody)
+        public AlarmViewModel(string pathMelody, Guid guid)
         {
-
+            this.guid = guid;
             #region MyRegion
             //MediaElement player = new MediaElement();
             //player.Source = new Uri(pathMelody, UriKind.Absolute);
@@ -139,10 +154,36 @@ namespace AlarmClock.Model.AlarmModel
 
             return alarm;
         }
+
+        /// <summary>
+        /// Продление будильника
+        /// </summary>
+        /// <param name="window"></param>
+        private void AddMitutes(Window window)
+        {
+            if (((AlarmViewModel)(window.DataContext)).IsProlong)
+            {
+                var win = App.Current.Windows.Cast<Window>()
+                       .FirstOrDefault(w => w is MainWindow);
+
+                var res = ((AlarmViewModel)(window.DataContext)).ProlongInt;
+
+                var list = ((MainViewModel)win.DataContext).ListAlarmClocks;
+
+                var alarmClock = list.Where(w => w.Guid == this.guid).FirstOrDefault();
+
+                alarmClock.Time = alarmClock.Time.AddMinutes(res);
+
+                XMLService ser = new XMLService(list);
+                ser.SaveFile();
+                ((MainViewModel)win.DataContext).ListAlarmClocks = ser.OpenFile();
+            }
+        }
         #endregion
 
         #region Commands
-        #region AddAlarmClock
+
+        #region OkAlarmClockCommand
         private void OkAlarmClockExecute(object obj)
         {
             try
@@ -154,7 +195,9 @@ namespace AlarmClock.Model.AlarmModel
                     sp.Stop();
 
                 window.Close();
-               
+
+                AddMitutes(window);
+
             }
             catch (Exception e)
             {
@@ -175,6 +218,7 @@ namespace AlarmClock.Model.AlarmModel
         }
 
         #endregion
+
         #endregion
     }
 }

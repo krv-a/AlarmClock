@@ -53,7 +53,7 @@
             <ToggleButton
                Style="{StaticResource MaterialDesignSwitchToggleButton}"
                ToolTip="Выключить" 
-               IsChecked="{Binding IsCheckedStop, UpdateSourceTrigger=PropertyChanged}"/>
+               IsChecked="{Binding IsProlong, UpdateSourceTrigger=PropertyChanged}"/>
 
         </StackPanel>
         <!--Кнопки-->
