@@ -14,7 +14,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Звонок" Height="150" Width="300"
+        Title="Звонок" Height="160" Width="300"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow">
     <Grid >
@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -44,7 +44,7 @@
             <Label>Продлить на</Label>
             <TextBox Width="25"
                      Margin="2"
-                     Text="5"
+                     Text="{Binding Prolong, UpdateSourceTrigger=PropertyChanged}"
                      HorizontalAlignment="Right"
                 >
                 
@@ -64,7 +64,6 @@
 
             <Button
                         Style="{StaticResource MaterialDesignFlatLightBgButton}"
-                        ToolTip="Добавить"
                         Margin="5" 
                         Command="{Binding OkAlarmClockCommand}"
                         

@@ -19,6 +19,7 @@ namespace AlarmClock.Model.AlarmModel
         #endregion
 
         #region Properties
+        
         #region IsCheckedStop
         private bool isCheckedStop = true;
         public bool IsCheckedStop
@@ -33,6 +34,36 @@ namespace AlarmClock.Model.AlarmModel
             }
         }
         #endregion
+
+        #region ProlongInt
+        private int prolongInt = 0;
+        public int ProlongInt
+        {
+            get => prolongInt;
+            set
+            {
+                prolongInt = value;
+                OnPropertyChanged(nameof(ProlongInt));
+            }
+        }
+        #endregion
+
+        #region Prolong
+        private string prolong = "5";
+        public string Prolong
+        {
+            get => prolong;
+            set
+            {
+                if (int.TryParse(value, out prolongInt))
+                {
+                    prolong = value;
+                    OnPropertyChanged(nameof(Prolong)); 
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Constructors

@@ -36,6 +36,7 @@
                         Margin="2"
                         Height="20"
                         Width="20"
+                        ToolTip="Удалить"
                         VerticalAlignment="Top"
                         Command="{Binding DelAlarmClockCommand}"
                         x:Name="IsDeleted"

@@ -18,10 +18,14 @@
         WindowStartupLocation="CenterScreen" Closing="Window_Closing">
 
     <Window.Resources>
-        <DataTemplate x:Key="Alarm"
-                      >
+        <DataTemplate x:Key="Alarm">
+            <Border BorderThickness="2"
+                    Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}"
+                    BorderBrush="BlueViolet"
+                    CornerRadius="3">
             <StackPanel Orientation="Horizontal"
                         Background="LightGray"
+                        Margin="2"
                         >
                 <StackPanel Orientation="Horizontal"
                        
@@ -43,7 +47,8 @@
                            Margin="2"
                            FontWeight="Bold"
                            FontSize="20"
-                           MinWidth="100"
+                           MinWidth="150"
+                           MaxWidth="150"
                            HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                            Height="Auto"
@@ -115,6 +120,7 @@
                 </Button>-->
                 
             </StackPanel>
+            </Border>
         </DataTemplate>
     </Window.Resources>
 
@@ -200,7 +206,7 @@
                     />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            
+
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal">
@@ -220,7 +226,8 @@
             <Button x:Name="AddAlarmClock"
                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                     ToolTip="Добавить будильник" 
-                    Command="{Binding AddAlarmClockCommand}" >
+                    Command="{Binding AddAlarmClockCommand}"
+                    Margin="10">
                 <materialDesign:PackIcon
                        Kind="AddAlarm"
                        Height="24"
