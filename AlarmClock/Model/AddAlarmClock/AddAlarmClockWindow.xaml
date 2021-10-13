@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="Добавление/редактирование"
-        Height="365" 
+        Height="430" 
         Width="260"
         Name="AddAlarmDialog"
         ResizeMode="NoResize">
@@ -116,10 +116,10 @@
 
                 <ComboBox FontSize="20" 
                           Name="Sound"
-                          materialDesign:HintAssist.Hint="Мелодия" 
+                          materialDesign:HintAssist.Hint="Мелодия1" 
                           Style="{StaticResource MaterialDesignFilledComboBox}"
                           FontWeight="Bold"
-                          Width="170"
+                          Width="200"
                           Height="Auto"
                           Margin="2"
                           ItemsSource="{Binding ListSounds, UpdateSourceTrigger=PropertyChanged}"
@@ -127,6 +127,26 @@
                           DisplayMemberPath="RuName"
                           >
                 </ComboBox>
+               
+            </StackPanel>
+            <!--Звук-->
+            <StackPanel Orientation="Horizontal"
+                         HorizontalAlignment="Center"
+                        Margin="3">
+
+
+                <TextBox FontSize="20" 
+                         Name="MusicName"
+                          materialDesign:HintAssist.Hint="Мелодия2" 
+                          Style="{StaticResource MaterialDesignFilledTextBox}"
+                          FontWeight="Bold"
+                          IsEnabled="False"
+                          Width="155"
+                          Height="Auto"
+                         Text="{Binding MusicName, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="2"
+                          >
+                </TextBox>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         Margin="2"
                         ToolTip="Выбрать"

@@ -120,6 +120,32 @@ namespace AlarmClock.Model.AddAlarmClock
         }
         #endregion
 
+        #region MusicPath
+        private string musicPath;
+        public string MusicPath
+        {
+            get => musicPath;
+            set
+            {
+                musicPath = value;
+                OnPropertyChanged(nameof(MusicPath));
+            }
+        }
+        #endregion
+
+        #region MusicName
+        private string musicName;
+        public string MusicName
+        {
+            get => musicName;
+            set
+            {
+                musicName = value;
+                OnPropertyChanged(nameof(MusicName));
+            }
+        }
+        #endregion
+
         #region ListSounds 
         private ObservableCollection<SoundModel> listSounds = new ObservableCollection<SoundModel>();
         public ObservableCollection<SoundModel> ListSounds
@@ -166,6 +192,7 @@ namespace AlarmClock.Model.AddAlarmClock
                 IsDeleted = alarmClock.IsDeleted;
                 Music = alarmClock.Music;
                 SelectedSound = GetSound(alarmClock.Music);
+                MusicName = alarmClock.MusicName;
             }
 
         }
@@ -289,15 +316,8 @@ namespace AlarmClock.Model.AddAlarmClock
                 {
                     name = item;
                 }
-
-                ListSounds[0].RuName = name;
-                ListSounds[0].Name = filename;
-                SelectedSound = ListSounds[0];
-
-                OnPropertyChanged(nameof(ListSounds));
-
-               
-
+                MusicName = name;
+                MusicPath = filename;
             }
             catch (Exception e)
             {

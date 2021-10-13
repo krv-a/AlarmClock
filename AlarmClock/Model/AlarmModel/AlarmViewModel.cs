@@ -3,8 +3,10 @@ using AlarmClock.Helper;
 using System;
 using System.Linq;
 using System.Media;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -14,6 +16,7 @@ namespace AlarmClock.Model.AlarmModel
     {
         #region Members
         SoundPlayer sp = new SoundPlayer();
+        MediaPlayer pl = new MediaPlayer();
         Guid guid;
         #endregion
 
@@ -28,7 +31,10 @@ namespace AlarmClock.Model.AlarmModel
             {
                 isCheckedStop = value;
                 if (!value)
+                {
                     sp.Stop();
+                    pl.Stop();
+                }
                 OnPropertyChanged(nameof(IsCheckedStop));
             }
         }
@@ -83,16 +89,7 @@ namespace AlarmClock.Model.AlarmModel
         public AlarmViewModel(string pathMelody, Guid guid, string musicPath)
         {
             this.guid = guid;
-            #region MyRegion
-            //MediaElement player = new MediaElement();
-            //player.Source = new Uri(pathMelody, UriKind.Absolute);
-            //player.LoadedBehavior = MediaState.Manual;
-
-            //player.Volume = 20f;
-            //player.SpeedRatio = 1f;
-            ////player.Position = TimeSpan.Zero;
-            //player.Play(); 
-            #endregion
+  
 
             if (string.IsNullOrEmpty(musicPath))
             {
@@ -105,9 +102,9 @@ namespace AlarmClock.Model.AlarmModel
             }
             else
             {
-                MediaPlayer player = new MediaPlayer();
-                player.Open(new Uri(musicPath, UriKind.Absolute));
-                player.Play();
+                pl.Open(new Uri(musicPath, UriKind.RelativeOrAbsolute));
+                   // Thread.Sleep(1000);
+                    pl.Play(); 
             }
 
         }
@@ -199,6 +196,8 @@ namespace AlarmClock.Model.AlarmModel
 
                 if (sp != null)
                     sp.Stop();
+                if (pl != null)
+                    pl.Stop();
 
                 window.Close();
 
@@ -232,6 +231,8 @@ namespace AlarmClock.Model.AlarmModel
             {
                 if (sp != null)
                     sp.Stop();
+                if (pl != null)
+                    pl.Stop();
 
             }
             catch (Exception e)
