@@ -1,7 +1,9 @@
 ﻿using AlarmClock.Commands;
 using AlarmClock.Model.AlarmModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -119,8 +121,8 @@ namespace AlarmClock.Model.AddAlarmClock
         #endregion
 
         #region ListSounds 
-        private List<SoundModel> listSounds = new List<SoundModel>();
-        public List<SoundModel> ListSounds
+        private ObservableCollection<SoundModel> listSounds = new ObservableCollection<SoundModel>();
+        public ObservableCollection<SoundModel> ListSounds
         {
             get => listSounds;
             set
@@ -168,11 +170,17 @@ namespace AlarmClock.Model.AddAlarmClock
 
         }
 
-        
+
 
         private SoundModel GetSound(string music)
         {
             var sound = ListSounds.Where(w => w.RuName == music).FirstOrDefault();
+            if (sound == null)
+            {
+
+                ListSounds[0].RuName = music;
+                sound = ListSounds[0];
+            }
             return sound;
         }
         #endregion
@@ -218,13 +226,13 @@ namespace AlarmClock.Model.AddAlarmClock
         }
 
 
-        private RelayCommand selectCell;
+        private RelayCommand addAlarmCloc;
         public ICommand AddAlarmClockCommand
         {
             get
             {
-                return selectCell ??
-                     (selectCell = new RelayCommand(AddAlarmClockExecute));
+                return addAlarmCloc ??
+                     (addAlarmCloc = new RelayCommand(AddAlarmClockExecute));
             }
         }
 
@@ -235,28 +243,18 @@ namespace AlarmClock.Model.AddAlarmClock
         {
             try
             {
-
-                try
-                {
-                    IsDeleted = true;
-                    var window = App.Current.Windows.Cast<Window>()
-                               .FirstOrDefault(w => w is AddAlarmClockWindow);
+                IsDeleted = true;
+                var window = App.Current.Windows.Cast<Window>()
+                           .FirstOrDefault(w => w is AddAlarmClockWindow);
 
 
-                    window.DialogResult = true;
-                    window.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message, nameof(Exception));
-                }
-
+                window.DialogResult = true;
+                window.Close();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, nameof(Exception));
             }
-
         }
 
         private RelayCommand delAlarmClock;
@@ -266,6 +264,55 @@ namespace AlarmClock.Model.AddAlarmClock
             {
                 return delAlarmClock ??
                      (delAlarmClock = new RelayCommand(DelAlarmClockExecute));
+            }
+        }
+
+        #endregion
+
+        #region SelectMusicCommand
+
+        private void SelectMusicExecute(object obj)
+        {
+            try
+            {
+                OpenFileDialog op = new OpenFileDialog();
+
+                if (op.ShowDialog() == false)
+                    return;
+                // получаем выбранный файл
+                string filename = op.FileName;
+
+                string[] rows = filename.Split('\\');
+                string name = string.Empty;
+
+                foreach (var item in rows)
+                {
+                    name = item;
+                }
+
+                ListSounds[0].RuName = name;
+                ListSounds[0].Name = filename;
+                SelectedSound = ListSounds[0];
+
+                OnPropertyChanged(nameof(ListSounds));
+
+               
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, nameof(Exception));
+            }
+
+        }
+
+        private RelayCommand selectMusic;
+        public ICommand SelectMusicCommand
+        {
+            get
+            {
+                return selectMusic ??
+                     (selectMusic = new RelayCommand(SelectMusicExecute));
             }
         }
 

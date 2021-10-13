@@ -1,13 +1,10 @@
 ﻿using AlarmClock.Commands;
 using AlarmClock.Helper;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Media;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -21,7 +18,7 @@ namespace AlarmClock.Model.AlarmModel
         #endregion
 
         #region Properties
-        
+
         #region IsCheckedStop
         private bool isCheckedStop = true;
         public bool IsCheckedStop
@@ -73,7 +70,7 @@ namespace AlarmClock.Model.AlarmModel
                 if (int.TryParse(value, out prolongInt))
                 {
                     prolong = value;
-                    OnPropertyChanged(nameof(Prolong)); 
+                    OnPropertyChanged(nameof(Prolong));
                 }
             }
         }
@@ -83,7 +80,7 @@ namespace AlarmClock.Model.AlarmModel
 
         #region Constructors
 
-        public AlarmViewModel(string pathMelody, Guid guid)
+        public AlarmViewModel(string pathMelody, Guid guid, string musicPath)
         {
             this.guid = guid;
             #region MyRegion
@@ -97,12 +94,21 @@ namespace AlarmClock.Model.AlarmModel
             //player.Play(); 
             #endregion
 
-            Task.Run(() =>
+            if (string.IsNullOrEmpty(musicPath))
             {
-                sp.Stream = GetSound(pathMelody); 
-                //sp.Load();
-                sp.PlayLooping();
-            });
+                Task.Run(() =>
+                   {
+                       sp.Stream = GetSound(pathMelody);
+                       //sp.Load();
+                       sp.PlayLooping();
+                   });
+            }
+            else
+            {
+                MediaPlayer player = new MediaPlayer();
+                player.Open(new Uri(musicPath, UriKind.Absolute));
+                player.Play();
+            }
 
         }
 
@@ -207,13 +213,42 @@ namespace AlarmClock.Model.AlarmModel
         }
 
 
-        private RelayCommand selectCell;
+        private RelayCommand okAlarmClock;
         public ICommand OkAlarmClockCommand
         {
             get
             {
-                return selectCell ??
-                     (selectCell = new RelayCommand(OkAlarmClockExecute));
+                return okAlarmClock ??
+                     (okAlarmClock = new RelayCommand(OkAlarmClockExecute));
+            }
+        }
+
+        #endregion
+
+        #region CloseAlarmClockCommand
+        private void CloseAlarmClockExecute(object obj)
+        {
+            try
+            {
+                if (sp != null)
+                    sp.Stop();
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, nameof(Exception));
+            }
+
+        }
+
+
+        private RelayCommand closeAlarmClock;
+        public ICommand CloseAlarmClockCommand
+        {
+            get
+            {
+                return closeAlarmClock ??
+                     (closeAlarmClock = new RelayCommand(CloseAlarmClockExecute));
             }
         }
 

@@ -52,6 +52,7 @@ namespace AlarmClock.Helper
                 XAttribute id = new XAttribute("Id", item.Id);
                 XAttribute isChecked = new XAttribute("IsChecked", item.IsChecked);
                 XAttribute music = new XAttribute("Music", item.Music);
+                XAttribute musicPath = new XAttribute("MusicPath", item.MusicPath);
                 // добавляем атрибут и элементы в первый элемент
                 alarmClock.Add(isDeleted);
                 alarmClock.Add(guid);
@@ -61,6 +62,7 @@ namespace AlarmClock.Helper
                 alarmClock.Add(id);
                 alarmClock.Add(isChecked);
                 alarmClock.Add(music);
+                alarmClock.Add(musicPath);
 
                 // добавляем в корневой элемент
                 alarmClocks.Add(alarmClock);
@@ -98,6 +100,7 @@ namespace AlarmClock.Helper
                     var id = xnode.Attributes.GetNamedItem("Id");
                     var isChecked = xnode.Attributes.GetNamedItem("IsChecked");
                     var music = xnode.Attributes.GetNamedItem("Music");
+                    var musicPath = xnode.Attributes.GetNamedItem("MusicPath");
                     AlarmClockModel ac = new AlarmClockModel()
                     {
                         IsDeleted = Convert.ToBoolean(isDeleted.Value),
@@ -107,6 +110,7 @@ namespace AlarmClock.Helper
                         Name = name.Value,
                         Id = Convert.ToInt32(id.Value),
                         Music = music.Value,
+                        MusicPath = musicPath.Value,
                         IsChecked = Convert.ToBoolean(isChecked.Value),
 
 

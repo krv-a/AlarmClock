@@ -220,7 +220,7 @@ namespace AlarmClock
                var window = new AlarmModelWindow
                {
                    Title = item.Name,
-                   DataContext = new AlarmViewModel(item.Music, item.Guid),
+                   DataContext = new AlarmViewModel(item.Music, item.Guid, item.MusicPath),
                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
                };
 
@@ -255,7 +255,8 @@ namespace AlarmClock
                     SelectedAlarmClock.Name = window.Name.Text;
                     SelectedAlarmClock.Date = window?.Date?.SelectedDate ?? DateTime.Now;
                     SelectedAlarmClock.Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10);
-                    SelectedAlarmClock.Music = window?.Sound?.Text;
+                    SelectedAlarmClock.Music = ((AddAlarmClockViewModel)(window.DataContext))?.ListSounds[0]?.RuName;
+                    SelectedAlarmClock.MusicPath = ((AddAlarmClockViewModel)(window.DataContext))?.ListSounds[0]?.Name;
 
                     XMLService ser = new XMLService(ListAlarmClocks);
                     ser.SaveFile();
@@ -305,7 +306,9 @@ namespace AlarmClock
                         Date = window?.Date?.SelectedDate ?? DateTime.Now,
                         Time = window?.Time?.SelectedTime ?? DateTime.Now.AddSeconds(10),
                         IsChecked = true,
-                        Music = window.Sound.Text
+                        Music = ((AddAlarmClockViewModel)(window.DataContext))?.ListSounds[0]?.RuName,
+                        MusicPath = ((AddAlarmClockViewModel)(window.DataContext))?.ListSounds[0]?.Name 
+
                     };
                     ListAlarmClocks.Add(alarmClock);
                     OnPropertyChanged(nameof(ListAlarmClocks));

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:helper="clr-namespace:AlarmClock.Helper"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -17,6 +18,15 @@
         Title="Звонок" Height="160" Width="300"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow">
+        
+    <i:Interaction.Triggers>
+       <i:EventTrigger EventName="Closed">
+                <i:InvokeCommandAction 
+                        Command="{Binding CloseAlarmClockCommand}"
+                    />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid >
         <Grid.ColumnDefinitions>
            
